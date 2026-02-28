@@ -1,0 +1,266 @@
+/* ============================================================
+   GLOBAL STYLES — AI DEBATE SIMULATOR
+   Theme: Grungy, high-contrast black & white
+   Fonts: Bebas Neue (display) + DM Mono (UI) + Playfair (body)
+   ============================================================ */
+
+/* ── CSS VARIABLES ─────────────────────────────────────── */
+:root {
+  --black:    #080808;
+  --white:    #ede8df;        /* warm grungy off-white, not pure */
+  --white-dim: #b8b0a4;      /* dimmed grungy white for secondary text */
+  --white-mute: #6e6860;     /* muted grungy white for tertiary */
+  --gray-900: #0f0f0f;
+  --gray-800: #181818;
+  --gray-700: #242424;
+  --gray-600: #363636;
+  --gray-400: #787878;
+  --gray-300: #a8a8a8;
+  --gray-200: #d0d0d0;
+
+  /* Persona accent colors (reveal on interaction/speaking) */
+  --accent-1: #4fffb0;   /* Aria — neon mint */
+  --accent-2: #ff4f4f;   /* Marx — blood red */
+  --accent-3: #4fb8ff;   /* Sage — ice blue */
+  --accent-4: #ffd24f;   /* Nova — amber */
+
+  --font-display: "Bebas Neue", sans-serif;
+  --font-mono:    "DM Mono", monospace;
+  --font-body:    "Playfair Display", Georgia, serif;
+
+  --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ── CUSTOM CURSOR ─────────────────────────────────────── */
+* { cursor: none !important; }
+
+#custom-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 12px; height: 12px;
+  background: var(--white);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s, border-radius 0.15s;
+  mix-blend-mode: difference;
+}
+
+#custom-cursor.hovering {
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border-radius: 50%;
+}
+
+#custom-cursor.clicking {
+  width: 8px;
+  height: 8px;
+  background: var(--white);
+}
+
+#cursor-trail {
+  position: fixed;
+  top: 0; left: 0;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(240, 236, 228, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.12s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+/* ── RESET & BASE ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain overlay on the entire page */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--noise-url);
+  background-size: 180px 180px;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── SCROLLBAR ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-500); }
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────── */
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0.04em; line-height: 1.1; }
+p, span, label { font-family: var(--font-body); }
+code, .mono { font-family: var(--font-mono); }
+
+/* ── SELECTION ─────────────────────────────────────────── */
+::selection { background: var(--white); color: var(--black); }
+
+/* ── UTILITY CLASSES ────────────────────────────────────── */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ── GLITCH TEXT ANIMATION ───────────────────────────────── */
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 98% 0); transform: translate(-2px, 0); }
+  20%       { clip-path: inset(30% 0 50% 0); transform: translate(2px, 0); }
+  40%       { clip-path: inset(70% 0 10% 0); transform: translate(-1px, 0); }
+  60%       { clip-path: inset(10% 0 80% 0); transform: translate(1px, 0); }
+  80%       { clip-path: inset(60% 0 20% 0); transform: translate(-2px, 0); }
+}
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(50% 0 20% 0); transform: translate(2px, 0); }
+  20%       { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+  40%       { clip-path: inset(80% 0 5% 0);  transform: translate(1px, 0); }
+  60%       { clip-path: inset(20% 0 60% 0); transform: translate(-1px, 0); }
+  80%       { clip-path: inset(5% 0 90% 0);  transform: translate(2px, 0); }
+}
+
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: var(--white);
+}
+.glitch::before {
+  animation: glitch-1 3s infinite linear;
+  color: #4fffb0;
+  opacity: 0.7;
+}
+.glitch::after {
+  animation: glitch-2 3s infinite linear 0.1s;
+  color: #ff4f4f;
+  opacity: 0.5;
+}
+
+/* ── SCANLINE EFFECT ─────────────────────────────────────── */
+@keyframes scanlines {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.07) 2px,
+    rgba(0,0,0,0.07) 4px
+  );
+  pointer-events: none;
+  animation: scanlines 8s linear infinite;
+}
+
+/* ── FLICKER ─────────────────────────────────────────────── */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.85; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.9; }
+}
+
+/* ── SPEAKER GLOW ────────────────────────────────────────── */
+@keyframes speakerGlow {
+  0%, 100% { opacity: 0.6; transform: scale(0.95); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+
+/* ── AVATAR ANIMATIONS ───────────────────────────────────── */
+@keyframes avatarIdle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-4px) rotate(0.3deg); }
+  66%       { transform: translateY(-2px) rotate(-0.2deg); }
+}
+
+@keyframes avatarSpeak {
+  0%, 100% { transform: translateY(0) scale(1); filter: brightness(1.2); }
+  50%       { transform: translateY(-6px) scale(1.04); filter: brightness(1.5); }
+}
+
+@keyframes speakerGlow {
+  0%, 100% { box-shadow: 0 0 20px var(--glow-color, #4fffb0), 0 0 60px var(--glow-color, #4fffb0)40; }
+  50%       { box-shadow: 0 0 40px var(--glow-color, #4fffb0), 0 0 100px var(--glow-color, #4fffb0)60; }
+}
+
+/* ── WAVE BARS ───────────────────────────────────────────── */
+@keyframes waveBar {
+  0%, 100% { height: 3px;  opacity: 0.3; }
+  50%       { height: 22px; opacity: 1; }
+}
+
+/* ── BUBBLE ENTRANCE ─────────────────────────────────────── */
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── BLINK ───────────────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── SPIN ────────────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── FADE IN ─────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.5s ease forwards; }
+.fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+/* ── NOISE TEXTURE ON ELEMENTS ───────────────────────────── */
+.noisy {
+  position: relative;
+  overflow: hidden;
+}
+.noisy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise-url);
+  background-size: 150px 150px;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* ── INPUT RESET ─────────────────────────────────────────── */
+input, textarea, select, button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+}

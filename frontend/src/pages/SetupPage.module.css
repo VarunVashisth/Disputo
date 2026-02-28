@@ -1,0 +1,361 @@
+/* SetupPage.module.css */
+
+.page {
+  min-height: 100vh;
+  background: var(--black);
+  position: relative;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid #111;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.headerInner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoSymbol {
+  font-size: 18px;
+  color: var(--white);
+}
+
+.pillBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--white-mute);
+  border: 1px solid #222;
+  padding: 6px 14px;
+  border-radius: 2px;
+  background: transparent;
+  cursor: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.pillBtn:hover {
+  color: var(--white);
+  border-color: var(--white-dim);
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 72px 24px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, #151515 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.heroEyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--white-mute);
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 14vw, 140px);
+  color: var(--white);
+  line-height: 0.9;
+  letter-spacing: 0.04em;
+}
+
+.heroSub {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--white-mute);
+  margin-top: 24px;
+  font-style: italic;
+}
+
+/* ── Main ────────────────────────────────────────────────── */
+.main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ── Section ─────────────────────────────────────────────── */
+.section {
+  margin-bottom: 48px;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.sectionLabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--white-mute);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+/* ── Topic ───────────────────────────────────────────────── */
+.topicWrapper {
+  border: 1px solid #222;
+  border-radius: 2px;
+  transition: border-color 0.3s;
+  background: #0a0a0a;
+  position: relative;
+  overflow: hidden;
+}
+
+.topicWrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.2) 3px,rgba(0,0,0,0.2) 4px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.topicInput {
+  width: 100%;
+  padding: 20px 24px;
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--white);
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.topicInput::placeholder {
+  color: var(--white-mute);
+  font-style: italic;
+}
+
+/* ── Suggestions ─────────────────────────────────────────── */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.suggestionChip {
+  color: var(--white-mute) !important;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--white-mute);
+  border: 1px solid #1a1a1a;
+  padding: 6px 12px;
+  border-radius: 1px;
+  background: transparent;
+  cursor: none;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: left;
+}
+.suggestionChip:hover {
+  color: var(--white-dim);
+  border-color: var(--white-mute);
+}
+
+/* ── Persona Grid ─────────────────────────────────────────── */
+.personaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .personaGrid { grid-template-columns: 1fr; }
+}
+
+.personaCard {
+  padding: 18px;
+  border: 1px solid #1e1e1e;
+  border-radius: 2px;
+  cursor: none;
+  text-align: left;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.personaCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(135deg,transparent,transparent 4px,rgba(255,255,255,0.008) 4px,rgba(255,255,255,0.008) 5px);
+  pointer-events: none;
+}
+
+.personaCardTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.personaInfo {
+  flex: 1;
+}
+
+.personaName {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 4px;
+  transition: color 0.3s;
+}
+
+.personaIdeology {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--white-mute);
+  margin-top: 2px;
+}
+
+.personaTagline {
+  color: var(--white-mute);
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--white-mute);
+  margin-top: 6px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.personaStyle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--white-mute);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.personaCheck {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #2a2a2a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+/* ── Settings ─────────────────────────────────────────────── */
+.settingsRow {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settingLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--white-mute);
+}
+
+.turnButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.turnBtn {
+  width: 40px;
+  height: 36px;
+  border: 1px solid #222;
+  border-radius: 1px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: none;
+  transition: all 0.2s;
+}
+
+/* ── Error ───────────────────────────────────────────────── */
+.errorBox {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #ff4f4f;
+  border: 1px solid #3d1515;
+  padding: 12px 16px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+/* ── Start Button ─────────────────────────────────────────── */
+.startBtn {
+  width: 100%;
+  padding: 22px 40px;
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  border-radius: 2px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 4px;
+  cursor: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  transition: background 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.startBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 3px);
+  pointer-events: none;
+}
+
+.startBtn:hover {
+  background: #e0dcd4;
+  transform: translateY(-2px);
+}
+
+.startArrow {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.startBtn:hover .startArrow {
+  transform: translateX(4px);
+}

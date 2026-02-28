@@ -1,0 +1,339 @@
+/* DebatePage.module.css */
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--black);
+  overflow: hidden;
+}
+
+/* ── Top Bar ─────────────────────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #111;
+  background: #070707;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.backBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--white-mute);
+  border: 1px solid #1a1a1a;
+  padding: 6px 12px;
+  border-radius: 1px;
+  background: transparent;
+  cursor: none;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s;
+}
+.backBtn:hover { color: var(--white-dim); border-color: var(--white-mute); }
+
+.topicDisplay {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.topicLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #2a2a2a;
+  letter-spacing: 2px;
+  flex-shrink: 0;
+}
+
+.topicText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--white-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.turnCounter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.stopBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #ff4f4f;
+  border: 1px solid #3d1515;
+  padding: 7px 14px;
+  border-radius: 1px;
+  background: transparent;
+  cursor: none;
+  transition: all 0.2s;
+}
+.stopBtn:hover { background: #1a0808; }
+
+.exportBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #4fffb0;
+  border: 1px solid #1a3d2e;
+  padding: 7px 14px;
+  border-radius: 1px;
+  background: transparent;
+  cursor: none;
+  transition: all 0.2s;
+}
+.exportBtn:hover { background: #0a1f16; }
+
+/* ── Progress ────────────────────────────────────────────── */
+.progressTrack {
+  height: 2px;
+  background: #111;
+  flex-shrink: 0;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #2a2a2a, #888);
+  transition: width 0.8s ease;
+}
+
+/* ── Status Strip ────────────────────────────────────────── */
+.statusStrip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  border-bottom: 1px solid #0f0f0f;
+  background: #050505;
+  flex-shrink: 0;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #222;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.statusDot[data-active="true"] {
+  background: #4fffb0;
+  animation: blink 1.5s infinite;
+}
+
+.statusText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--white-mute);
+  letter-spacing: 2px;
+  flex: 1;
+}
+
+.statusIdeology {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+/* ── Body ────────────────────────────────────────────────── */
+.body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Left Panel ──────────────────────────────────────────── */
+.leftPanel {
+  width: 54%;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border-right: 1px solid #111;
+  gap: 16px;
+  overflow: hidden;
+  position: relative;
+  background: #050508;
+}
+
+/* Scanline + noise on left panel */
+.leftPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.14) 3px,
+      rgba(0,0,0,0.14) 4px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.leftPanel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Participants ─────────────────────────────────────────── */
+.participants {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.participant {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.5s;
+}
+
+.participantDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.participantName {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 3px;
+  transition: color 0.5s;
+}
+
+/* ── End Panel ───────────────────────────────────────────── */
+.endPanel {
+  text-align: center;
+  padding: 16px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.endText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--white-mute);
+  margin-bottom: 14px;
+}
+
+.endBtns {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.endBtn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--white-dim);
+  border: 1px solid #222;
+  padding: 8px 16px;
+  border-radius: 1px;
+  background: transparent;
+  cursor: none;
+  transition: all 0.2s;
+}
+.endBtn:hover { color: var(--white); border-color: var(--white-dim); }
+
+/* ── Error ───────────────────────────────────────────────── */
+.errorBox {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #ff4f4f;
+  border: 1px solid #2a0a0a;
+  padding: 10px 14px;
+  border-radius: 2px;
+  letter-spacing: 1px;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* ── Right Panel ─────────────────────────────────────────── */
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  background: #060609;
+}
+
+.feedHeader {
+  padding: 12px 24px;
+  border-bottom: 1px solid #111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.feedLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #2a2a2a;
+}
+
+.feedCount {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #1e1e1e;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .body { flex-direction: column; }
+  .leftPanel {
+    width: 100%;
+    height: 45vh;
+    border-right: none;
+    border-bottom: 1px solid #111;
+    justify-content: flex-start;
+    padding: 16px;
+  }
+  .rightPanel { height: 55vh; }
+}
