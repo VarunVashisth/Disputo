@@ -10,7 +10,9 @@ import { PERSONAS, TOPICS } from "../store/personas.js";
 import { PersonaAvatar } from "../components/PersonaAvatar.jsx";
 import styles from "./SetupPage.module.css";
 
+
 export function SetupPage() {
+  const [editingId , setEditingId] = React.useState(null);
   const navigate = useNavigate();
   const store = useDebateStore();
   const [topicFocused, setTopicFocused] = useState(false);
@@ -121,51 +123,118 @@ export function SetupPage() {
                   }}
                   onClick={() => store.togglePersona(idx)}
                 >
-                  <div className={styles.personaCardTop}>
-                    <PersonaAvatar
-                      persona={persona}
-                      isSpeaking={false}
-                      isActive={selected}
-                      size={60}
-                      showName={false}
-                    />
-                    <div className={styles.personaInfo}>
-                      <div className={styles.personaName} style={{ color: selected ? persona.color : "var(--white-dim)" }}>
-                        {persona.name}
+          <div className={styles.personaCardTop}>
+            <PersonaAvatar
+              persona={persona}
+              isSpeaking={false}
+              isActive={selected}
+              size={60}
+              showName={false}
+            />
+            <div className={styles.personaInfo}>
+              <div className={styles.personaName} style={{ color: selected ? persona.color : "var(--white-dim)" }}>
+                {persona.name}
+              </div>
+              <div className={styles.personaIdeology}>{persona.ideology}</div>
+              <div className={styles.personaTagline}>"{persona.tagline}"</div>
+            </div>
+            <div className={styles.personaCheck} style={{
+              borderColor: selected ? persona.color : "#2a2a2a",
+              background: selected ? persona.color : "transparent",
+            }}>
+              {selected && <span style={{ color: "#000", fontSize: 11 }}>✓</span>}
+            </div>
+          </div>
+          
+          <p className={styles.personaStyle}>{persona.style.slice(0, 80)}…</p>
+          
+          {/* ── Stance + Edit — outside the checkbox, full card width ── */}
+          {selected && (
+            <div
+              onClick={e => e.stopPropagation()}
+              style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}
+            >
+              {/* Stance picker */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: 4,
+                width: "100%",
+              }}>
+                {["FOR", "AGAINST", "NEUTRAL"].map(s => (
+                  <button
+                    key={s}
+                    onClick={e => { e.stopPropagation(); store.setPersonaStance(persona.id, s); }}
+                    style={{
+                      fontSize: 9,
+                      padding: "5px 4px",
+                      fontFamily: "var(--font-mono)",
+                      letterSpacing: 0.5,
+                      textAlign: "center",
+                      background: store.getPersonaStance(persona.id) === s ? persona.color : "transparent",
+                      color: store.getPersonaStance(persona.id) === s ? "#000" : "var(--white-mute)",
+                      border: `1px solid ${persona.color}40`,
+                      cursor: "pointer",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+          
+              {/* Edit persona toggle */}
+              <button
+                onClick={e => { e.stopPropagation(); setEditingId(editingId === persona.id ? null : persona.id); }}
+                style={{
+                  fontSize: 9, fontFamily: "var(--font-mono)",
+                  background: "transparent", color: "var(--white-mute)",
+                  border: "1px solid #2a2a2a", padding: "3px 8px",
+                  cursor: "pointer", letterSpacing: 1, textAlign: "left",
+                  width: "100%",
+                }}
+              >
+                {editingId === persona.id ? "▲ CLOSE EDIT" : "▼ EDIT PERSONA"}
+              </button>
+          
+              {/* Edit fields */}
+              {editingId === persona.id && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {[
+                    { key: "name",     label: "NAME",         multiline: false },
+                    { key: "ideology", label: "IDEOLOGY",     multiline: false },
+                    { key: "style",    label: "DEBATE STYLE", multiline: true  },
+                  ].map(({ key, label, multiline }) => {
+                    const current = store.personaOverrides[persona.id]?.[key] ?? persona[key];
+                    const Tag = multiline ? "textarea" : "input";
+                    return (
+                      <div key={key}>
+                        <div style={{
+                          fontSize: 8, fontFamily: "var(--font-mono)",
+                          color: "var(--white-mute)", letterSpacing: 1, marginBottom: 3,
+                        }}>
+                          {label}
+                        </div>
+                        <Tag
+                          value={current}
+                          rows={multiline ? 3 : undefined}
+                          onChange={e => store.setPersonaOverride(persona.id, key, e.target.value)}
+                          style={{
+                            width: "100%", background: "#0f0f0f",
+                            border: "1px solid #2a2a2a", color: "var(--white)",
+                            fontFamily: "var(--font-mono)", fontSize: 10,
+                            padding: "4px 6px", outline: "none",
+                            resize: multiline ? "vertical" : "none",
+                            boxSizing: "border-box",
+                          }}
+                        />
                       </div>
-                      <div className={styles.personaIdeology}>{persona.ideology}</div>
-                      <div className={styles.personaTagline}>"{persona.tagline}"</div>
-                    </div>
-                    <div className={styles.personaCheck} style={{
-                      borderColor: selected ? persona.color : "#2a2a2a",
-                      background: selected ? persona.color : "transparent",
-                    }}>
-                      {selected && <span style={{ color: "#000", fontSize: 11 }}>✓</span>}
-                      {selected && (   <div style={{ display:"flex",  gap:4, marginTop:10, paddingRight: 200, boxSizing:"border-box" }}>
-                          {["FOR","AGAINST","NEUTRAL"].map(s => (
-                            <button
-                              key={s}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                store.setPersonaStance(persona.id, s);
-                              }}
-                              style={{
-                                fontSize:7,           // smaller text
-                                padding:"5px 4px",    // tighter padding
-                                fontFamily:"var(--font-mono)",
-                                letterSpacing:0.5,    // reduced spacing
-                                background: store.getPersonaStance(persona.id) === s ? persona.color : "transparent",
-                                color: store.getPersonaStance(persona.id) === s ? "#000" : "var(--white-mute)",
-                                border: `1px solid ${persona.color}40`,
-                                cursor:"pointer",
-                                lineHeight:1.4,
-                              }}
-                            >{s}</button>
-                          ))}
-                        </div> )}
-                    </div>
-                  </div>
-                  <p className={styles.personaStyle}>{persona.style.slice(0, 80)}…</p>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
                 </button>
               );
             })}

@@ -26,6 +26,10 @@ export function useDebate(personas) {
 
     const selectedPersonas = store.selectedPersonaIds.map(i => personas[i]);
     const personasWithStance = selectedPersonas.map(p => ({   ...p,   stance: store.getPersonaStance(p.id),   }));
+    const resolvedPersonas = selectedPersonas.map(p => ({
+          ...store.getPersona(p),
+          stance: store.getPersonaStance(p.id),
+        }));
     runningRef.current = true;
     store.setIsRunning(true);
     store.setPhase("debate");
@@ -39,7 +43,7 @@ export function useDebate(personas) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           topic: store.topic,
-          personas: personasWithStance,
+          personas: resolvedPersonas,
           totalTurns: store.totalTurns,
         }),
       });

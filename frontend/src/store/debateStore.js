@@ -8,7 +8,8 @@ import { create } from "zustand";
 
 
 export const useDebateStore = create((set, get) => ({
-
+  
+  personaOverrides: {},
   personaStances: {},
   // ── Session ────────────────────────────────────────────
   sessionId: null,
@@ -45,6 +46,13 @@ export const useDebateStore = create((set, get) => ({
     ...state.personaStances, [personaId]: stance,
   }})),
   getPersonaStance: (personaId) => get().personaStances[personaId] ?? "FOR",
+  setPersonaOverride: (personaId , field , value) => set(state => ({ personaOverrides: {
+    ...state.personaOverrides, [personaId]: {
+      ...state.personaOverrides[personaId],
+      [field]: value,
+    }
+  }})),
+  getPersona: (basePersona) => ({ ...basePersona, ...get(get().personaOverrides[basePersona.id] || {}) }),
 
   setSession: (sessionId) => set({ sessionId }),
   setPhase: (phase) => set({ phase }),
