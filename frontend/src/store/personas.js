@@ -16,6 +16,7 @@ export const PERSONAS = [
     accentVar: "--accent-1",
     voice: { pitch: 1.2, rate: 0.97, lang: "en-US" },
     avatarVariant: "circle",
+    stance: "FOR",
   },
   {
     id: 1,
@@ -29,6 +30,7 @@ export const PERSONAS = [
     accentVar: "--accent-2",
     voice: { pitch: 0.82, rate: 0.88, lang: "en-GB" },
     avatarVariant: "square",
+    stance: "FOR",
   },
   {
     id: 2,
@@ -42,6 +44,7 @@ export const PERSONAS = [
     accentVar: "--accent-3",
     voice: { pitch: 1.0, rate: 0.83, lang: "en-US" },
     avatarVariant: "triangle",
+    stance: "FOR",
   },
   {
     id: 3,
@@ -55,6 +58,7 @@ export const PERSONAS = [
     accentVar: "--accent-4",
     voice: { pitch: 1.18, rate: 1.07, lang: "en-US" },
     avatarVariant: "diamond",
+    stance: "FOR",
   },
 ];
 

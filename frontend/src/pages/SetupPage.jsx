@@ -141,6 +141,28 @@ export function SetupPage() {
                       background: selected ? persona.color : "transparent",
                     }}>
                       {selected && <span style={{ color: "#000", fontSize: 11 }}>✓</span>}
+                      {selected && (   <div style={{ display:"flex",  gap:4, marginTop:10, paddingRight: 200, boxSizing:"border-box" }}>
+                          {["FOR","AGAINST","NEUTRAL"].map(s => (
+                            <button
+                              key={s}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                store.setPersonaStance(persona.id, s);
+                              }}
+                              style={{
+                                fontSize:7,           // smaller text
+                                padding:"5px 4px",    // tighter padding
+                                fontFamily:"var(--font-mono)",
+                                letterSpacing:0.5,    // reduced spacing
+                                background: store.getPersonaStance(persona.id) === s ? persona.color : "transparent",
+                                color: store.getPersonaStance(persona.id) === s ? "#000" : "var(--white-mute)",
+                                border: `1px solid ${persona.color}40`,
+                                cursor:"pointer",
+                                lineHeight:1.4,
+                              }}
+                            >{s}</button>
+                          ))}
+                        </div> )}
                     </div>
                   </div>
                   <p className={styles.personaStyle}>{persona.style.slice(0, 80)}…</p>

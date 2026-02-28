@@ -6,7 +6,10 @@
 
 import { create } from "zustand";
 
+
 export const useDebateStore = create((set, get) => ({
+
+  personaStances: {},
   // ── Session ────────────────────────────────────────────
   sessionId: null,
   topic: "",
@@ -38,6 +41,10 @@ export const useDebateStore = create((set, get) => ({
       set({ selectedPersonaIds: [...selectedPersonaIds, idx] });
     }
   },
+  setPersonaStance: (personaId, stance) => set(state => ({ personaStances: {
+    ...state.personaStances, [personaId]: stance,
+  }})),
+  getPersonaStance: (personaId) => get().personaStances[personaId] ?? "FOR",
 
   setSession: (sessionId) => set({ sessionId }),
   setPhase: (phase) => set({ phase }),
