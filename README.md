@@ -1,4 +1,4 @@
-# ⚔️ AI Debate Simulator — MVP
+# ⚔️ AI Debate Simulator — Disputo
 
 > Multi-persona intellectual debate engine. Black & white grungy aesthetic.
 > Powered by Groq + Llama 3.3 (free). Zero cost to run.
