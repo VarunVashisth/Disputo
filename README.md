@@ -5,7 +5,7 @@
 
 ---
 
-## 🚀 Quick Start (5 minutes)
+## Installation
 
 ### 1. Get a free Groq API key
 Go to https://console.groq.com → sign up → copy your API key.
