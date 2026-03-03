@@ -3,7 +3,7 @@ import { useDebateStore } from "../store/debateStore.js";
 import { useTTS } from "./useTTS.js";
 import { HUMAN_ID } from "../store/personas.js";
 
-const API = "/api/debate";
+const API = import.meta.env.VITE_API_URL;
 
 function listenForSpeech(lang = "en-US") {
   return new Promise((resolve, reject) => {
