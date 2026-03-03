@@ -1,8 +1,3 @@
-// ============================================================
-// DEBATE ROUTES
-// All endpoints related to debate session management
-// ============================================================
-
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { generateArgument } from "../services/groqService.js";
@@ -11,100 +6,62 @@ import { sessionStore } from "../services/sessionStore.js";
 
 export const debateRouter = Router();
 
-// ── POST /api/debate/start ────────────────────────────────
-// Creates a new debate session
-// Body: { topic, personas, totalTurns }
-// Returns: { sessionId, session }
+// POST /api/debate/start
 debateRouter.post("/start", (req, res) => {
   const { topic, personas, totalTurns = 10 } = req.body;
+  if (!topic || !personas || personas.length < 1)
+    return res.status(400).json({ error: "topic and at least 1 AI persona required" });
 
-  if (!topic || !personas || personas.length < 2) {
-    return res.status(400).json({ error: "topic and at least 2 personas required" });
-  }
-
-  const sessionId = uuidv4();
   const session = {
-    id: sessionId,
-    topic,
-    personas,
-    totalTurns,
-    currentTurn: 0,
-    argumentHistory: [],   // ← THE MEMORY — grows each turn
-    status: "active",      // active | paused | ended
-    createdAt: Date.now(),
+    id: uuidv4(), topic, personas, totalTurns,
+    currentTurn: 0, argumentHistory: [], status: "active", createdAt: Date.now(),
   };
-
-  sessionStore.set(sessionId, session);
-  console.log(`[Session] Created: ${sessionId} | Topic: "${topic}" | ${personas.length} personas`);
-
-  res.json({ sessionId, session });
+  sessionStore.set(session.id, session);
+  console.log(`[Session] ${session.id} | "${topic}" | ${personas.length} personas`);
+  res.json({ sessionId: session.id, session });
 });
 
-
-// ── POST /api/debate/turn ─────────────────────────────────
-// Runs ONE debate turn. Streams the response via SSE.
-// Body: { sessionId }
-// Returns: Server-Sent Events stream
+// POST /api/debate/turn  — AI speaks
 debateRouter.post("/turn", async (req, res) => {
   const { sessionId } = req.body;
   const session = sessionStore.get(sessionId);
-
   if (!session) return res.status(404).json({ error: "Session not found" });
-  if (session.status === "ended") return res.status(400).json({ error: "Debate already ended" });
-  if (session.currentTurn >= session.totalTurns) {
-    session.status = "ended";
-    return res.json({ ended: true, session });
-  }
+  if (session.status === "ended") return res.status(400).json({ error: "Debate ended" });
 
-  // Who speaks this turn (round-robin)
+  // Round-robin over AI personas only
   const personaIndex = session.currentTurn % session.personas.length;
   const persona = session.personas[personaIndex];
   const lastArg = session.argumentHistory.at(-1) || null;
 
   const systemPrompt = buildSystemPrompt(persona);
-  const userPrompt = buildTurnPrompt(persona, session.topic, session.argumentHistory, lastArg);
+  const userPrompt   = buildTurnPrompt(persona, session.topic, session.argumentHistory, lastArg);
 
-  // ── SSE Setup ────────────────────────────────────────────
-  // Server-Sent Events lets us stream text word-by-word to the frontend
-  // Frontend receives: data: {"type":"chunk","text":"word "}
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-
-  const send = (obj) => res.write(`data: ${JSON.stringify(obj)}\n\n`);
+  const send = obj => res.write(`data: ${JSON.stringify(obj)}\n\n`);
 
   send({ type: "turn_start", persona, turn: session.currentTurn + 1 });
 
   try {
     let fullText = "";
-
-    await generateArgument(systemPrompt, userPrompt, (chunk) => {
+    await generateArgument(systemPrompt, userPrompt, chunk => {
       fullText += chunk;
       send({ type: "chunk", text: chunk });
     });
 
-    // Store completed argument in session memory
     const entry = {
-      personaId: persona.id,
-      personaName: persona.name,
-      ideology: persona.ideology,
-      color: persona.color,
-      persona,
-      summary: fullText.trim(),
+      personaId: persona.id, personaName: persona.name, ideology: persona.ideology,
+      color: persona.color, persona, summary: fullText.trim(),
       turn: session.currentTurn + 1,
     };
 
     session.argumentHistory.push(entry);
     session.currentTurn += 1;
-
-    if (session.currentTurn >= session.totalTurns) {
-      session.status = "ended";
-    }
-
+    if (session.currentTurn >= session.totalTurns) session.status = "ended";
     sessionStore.set(sessionId, session);
     send({ type: "turn_end", entry, session });
     res.end();
-
   } catch (err) {
     console.error("[Turn Error]", err.message);
     send({ type: "error", message: err.message });
@@ -112,18 +69,24 @@ debateRouter.post("/turn", async (req, res) => {
   }
 });
 
-
-// ── GET /api/debate/session/:id ───────────────────────────
-// Returns the current state of a session
-debateRouter.get("/session/:id", (req, res) => {
-  const session = sessionStore.get(req.params.id);
+// POST /api/debate/inject  — Human's turn pushed into session memory
+debateRouter.post("/inject", (req, res) => {
+  const { sessionId, entry } = req.body;
+  const session = sessionStore.get(sessionId);
   if (!session) return res.status(404).json({ error: "Session not found" });
-  res.json({ session });
+
+  // Add to history without advancing the AI turn counter
+  session.argumentHistory.push({ ...entry, injected: true });
+  sessionStore.set(sessionId, session);
+  res.json({ ok: true });
 });
 
+debateRouter.get("/session/:id", (req, res) => {
+  const s = sessionStore.get(req.params.id);
+  if (!s) return res.status(404).json({ error: "Not found" });
+  res.json({ session: s });
+});
 
-// ── DELETE /api/debate/session/:id ───────────────────────
-// Ends and cleans up a session
 debateRouter.delete("/session/:id", (req, res) => {
   sessionStore.delete(req.params.id);
   res.json({ deleted: true });
