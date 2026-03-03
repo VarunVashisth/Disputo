@@ -1,38 +1,80 @@
 // ============================================================
-// useTTS — Text-to-Speech Hook
-// Wraps Web Speech API. Each persona has unique pitch+rate.
-// Returns a speak() function that resolves when speech ends.
+// useTTS — Optimized Web Speech TTS
+// Smooth male voice selection + reduced stutter
 // ============================================================
 
 import { useCallback } from "react";
+import { PERSONAS } from "../store/personas";
 
 export function useTTS(voiceEnabled) {
+
+  // Ensure voices are loaded
+  if (typeof window !== "undefined") {
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+  }
+  
   const speak = useCallback((text, persona) => {
     return new Promise((resolve) => {
-      if (!voiceEnabled || !window.speechSynthesis) {
+  
+      if (!voiceEnabled || !window.speechSynthesis || !persona) {
         resolve();
         return;
       }
-
-      window.speechSynthesis.cancel();
-
+  
+      // 🔕 Skip human
+      if (persona.type === "human") {
+        resolve();
+        return;
+      }
+  
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+  
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.pitch = persona.voice.pitch;
-      utterance.rate  = persona.voice.rate;
-      utterance.lang  = persona.voice.lang;
-
-      // Pick a matching voice from the browser's voice list
+      utterance.lang = "en-US";
+      utterance.pitch = 0.88;
+      utterance.rate  = 0.9;
+  
       const voices = window.speechSynthesis.getVoices();
-      const match = voices.find(v =>
-        v.lang.startsWith(persona.voice.lang.slice(0, 2)) && !v.name.includes("Google")
-      ) || voices.find(v => v.lang.startsWith("en"));
-
-      if (match) utterance.voice = match;
-
-      utterance.onend   = resolve;
+  
+      let selectedVoice = null;
+  
+      // 🎙 Assign voice based on persona.id
+      if (persona.id === 0) {
+        selectedVoice = voices.find(v => v.name === "Google UK English Male");
+      }
+  
+      else if (persona.id === 1) {
+        selectedVoice = voices.find(v => v.name === "Microsoft Ravi - English (India)");
+      }
+  
+      else if (persona.id === 2) {
+        selectedVoice = voices.find(v => v.name.includes("Male") && v.lang.startsWith("en"));
+      }
+  
+      else if (persona.id === 3) {
+        selectedVoice = voices.find(v => v.name === "Microsoft Ravi - English (India)");
+      }
+  
+      // Fallback safety
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.startsWith("en"));
+      }
+  
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+  
+      utterance.onend = resolve;
       utterance.onerror = resolve;
-
-      window.speechSynthesis.speak(utterance);
+  
+      setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, 80);
+  
     });
   }, [voiceEnabled]);
 

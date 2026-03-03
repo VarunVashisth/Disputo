@@ -21,6 +21,58 @@ debateRouter.post("/start", (req, res) => {
   res.json({ sessionId: session.id, session });
 });
 
+
+debateRouter.post("/tts", async (req, res) => {
+  try {
+    const { text, voiceId } = req.body;
+
+    if (!text || !voiceId) {
+      return res.status(400).json({ error: "Missing text or voiceId" });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      console.error("Missing ELEVENLABS_API_KEY");
+      return res.status(500).json({ error: "Server misconfigured" });
+    }
+
+    const resp = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+        },
+        body: JSON.stringify({
+          text,
+          model_id: "eleven_turbo_v2",
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.5,
+            style: 0.3,
+          },
+        }),
+      }
+    );
+
+    if (!resp.ok) {
+      const errorText = await resp.text();
+      console.error("ElevenLabs error:", errorText);
+      return res.status(500).json({ error: "TTS failed" });
+    }
+
+    const buf = await resp.arrayBuffer();
+
+    res.set("Content-Type", "audio/mpeg");
+    res.send(Buffer.from(buf));
+
+  } catch (err) {
+    console.error("TTS route crashed:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 // POST /api/debate/turn  — AI speaks
 debateRouter.post("/turn", async (req, res) => {
   const { sessionId } = req.body;

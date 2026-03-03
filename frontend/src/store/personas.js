@@ -7,7 +7,7 @@ export const PERSONAS = [
     tagline: "Freedom is the only system that works.",
     style: "Confident, direct, uses economic logic and case studies. Believes markets and individual agency solve most problems. Gets sharper when challenged.",
     color: "#4fffb0", dimColor: "#1a3d2e", accentVar: "--accent-1",
-    voice: { pitch: 1.2, rate: 0.97, lang: "en-US" }, avatarVariant: "circle",
+    voice: { pitch: 0.88, rate: 0.90,  elevenLabsId: "MFZUKuGQUsGJPQjTS4wC" }, avatarVariant: "circle",
     imageUrl: "/personas/aria.png",
   },
   {
@@ -16,8 +16,9 @@ export const PERSONAS = [
     tagline: "Capital is the root of every injustice.",
     style: "Passionate, uses historical precedent and class analysis. Challenges power structures. Becomes more forceful when defending workers and equity.",
     color: "#ff4f4f", dimColor: "#3d1a1a", accentVar: "--accent-2",
-    voice: { pitch: 0.82, rate: 0.88, lang: "en-GB" }, avatarVariant: "square",
+    voice: { pitch: 0.75, rate: 1.0,  elevenLabsId: "Cz0K1kOv9tD8l0b5Qu53" }, avatarVariant: "square",
     imageUrl: "/personas/marx.png",
+ 
   },
   {
     id: 2, name: "SAGE", fullName: "Sage Okafor",
@@ -25,8 +26,9 @@ export const PERSONAS = [
     tagline: "Virtue alone is sufficient for happiness.",
     style: "Calm, measured, uses the Socratic method. Probes assumptions. Focuses on first principles and virtue ethics. Never raises voice but cuts deepest.",
     color: "#4fb8ff", dimColor: "#1a2d3d", accentVar: "--accent-3",
-    voice: { pitch: 1.0, rate: 0.83, lang: "en-US" }, avatarVariant: "triangle",
+    voice: { pitch: 0.92, rate: 0.92,     elevenLabsId: "jfIS2w2yJi0grJZPyEsk",}, avatarVariant: "triangle",
     imageUrl: "/personas/sage.png",
+ 
   },
   {
     id: 3, name: "NOVA", fullName: "Nova Chen",
@@ -34,7 +36,7 @@ export const PERSONAS = [
     tagline: "Every problem is an engineering challenge.",
     style: "Enthusiastic, cites exponential growth curves, disruption, and innovation. Believes technology will solve every human problem. Impatient with pessimism.",
     color: "#ffd24f", dimColor: "#3d2e0a", accentVar: "--accent-4",
-    voice: { pitch: 1.18, rate: 1.07, lang: "en-US" }, avatarVariant: "diamond",
+    voice: { pitch: 0.85, rate: 1.0, elevenLabsId: "6F5Zhi321D3Oq7v1oNT4" }, avatarVariant: "diamond",
     imageUrl: "/personas/nova.png",
   },
 ];
