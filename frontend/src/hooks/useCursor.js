@@ -1,7 +1,4 @@
-// ============================================================
-// useCursor — Custom Cursor Hook
-// Creates the black/white cursor that changes on hover
-// ============================================================
+
 
 import { useEffect } from "react";
 

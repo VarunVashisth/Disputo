@@ -1,10 +1,4 @@
-// ============================================================
-// GROQ SERVICE
-// Wraps the Groq SDK. Handles streaming responses.
-// Model: llama-3.3-70b-versatile (free, excellent quality)
-//
-// FREE KEY: https://console.groq.com  (no credit card needed)
-// ============================================================
+
 
 import Groq from "groq-sdk";
 
@@ -28,13 +22,7 @@ function getClient() {
   return groqClient;
 }
 
-// ── generateArgument ─────────────────────────────────────
-// Streams AI response chunk by chunk via the onChunk callback.
-//
-// @param systemPrompt  string  - persona identity & rules
-// @param userPrompt    string  - topic + history + instruction
-// @param onChunk       fn      - called with each text chunk
-// @returns             Promise<string> - full completed text
+
 export async function generateArgument(systemPrompt, userPrompt, onChunk) {
   const client = getClient();
 

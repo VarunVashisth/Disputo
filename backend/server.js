@@ -1,12 +1,4 @@
-// ============================================================
-// AI DEBATE SIMULATOR — BACKEND SERVER
-// Stack: Node.js + Express + Groq SDK
-// Architecture:
-//   • /api/debate/start   → creates a new session in memory
-//   • /api/debate/turn    → runs ONE AI turn (SSE streamed)
-//   • /api/debate/session → returns full session state
-//   • Sessions stored in-memory Map (replace with Redis later)
-// ============================================================
+
 
 import express from "express";
 import cors from "cors";
@@ -19,8 +11,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ── MIDDLEWARE ────────────────────────────────────────────
-// Allow ALL origins in dev — no CORS issues
+
 app.use(cors({ origin: "*", credentials: false }));
 app.use(express.json());
 
@@ -30,10 +21,10 @@ app.use((req, _res, next) => {
   next();
 });
 
-// ── ROUTES ────────────────────────────────────────────────
+
 app.use("/api/debate", debateRouter);
 
-// Root — so browser doesn't show "cannot GET /"
+
 app.get("/", (_req, res) => {
   res.json({
     name: "AI Debate Simulator API",
@@ -56,7 +47,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-// ── ERROR HANDLER ─────────────────────────────────────────
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {

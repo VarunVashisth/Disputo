@@ -1,7 +1,4 @@
-// ============================================================
-// useTTS — Optimized Web Speech TTS
-// Smooth male voice selection + reduced stutter
-// ============================================================
+
 
 import { useCallback } from "react";
 import { PERSONAS } from "../store/personas";
@@ -42,7 +39,7 @@ export function useTTS(voiceEnabled) {
   
       let selectedVoice = null;
   
-      // 🎙 Assign voice based on persona.id
+      // Assign voice based on persona.id
       if (persona.id === 0) {
         selectedVoice = voices.find(v => v.name === "Google UK English Male");
       }

@@ -1,13 +1,7 @@
-// ============================================================
-// PersonaAvatar — Grungy Faceless Human Figures
-// Real human seated silhouette, NO face (blank/void head).
-// Grungy ink-print texture via canvas overlay.
-// B&W + texture at rest → color bleed + glow when speaking.
-// ============================================================
+
 
 import React, { useEffect, useRef } from "react";
 
-// ── Texture Canvas Overlay ────────────────────────────────
 function TextureOverlay({ color, isSpeaking, size }) {
   const canvasRef = useRef(null);
   const rafRef = useRef(null);
@@ -73,17 +67,14 @@ function TextureOverlay({ color, isSpeaking, size }) {
   );
 }
 
-// ── Seated Figure Variants ────────────────────────────────
 function Figure({ variant, color, isSpeaking, W, H }) {
   const fill     = isSpeaking ? color : "#2a2a2a";
   const fillDark = isSpeaking ? color + "cc" : "#181818";
   const acc      = isSpeaking ? color + "55" : "#121212";
 
-  // chair geometry shared
   const chairW = variant === "square" ? 0.52 : 0.42;
   const chairX = (1 - chairW) / 2;
 
-  // posture offsets per variant
   const lean = variant === "diamond" ? -0.04 : 0;         // torso shift up
   const headScale = variant === "square" ? 1.18 : variant === "triangle" ? 0.88 : 1;
   const bodyW    = variant === "square" ? 0.44 : variant === "triangle" ? 0.26 : 0.32;
@@ -149,7 +140,6 @@ function Figure({ variant, color, isSpeaking, W, H }) {
   );
 }
 
-// ── Corner Brackets ───────────────────────────────────────
 function CornerBrackets({ color, isSpeaking }) {
   const c = isSpeaking ? color + "bb" : "#1e1e1e";
   const s = 10;
@@ -163,7 +153,6 @@ function CornerBrackets({ color, isSpeaking }) {
   );
 }
 
-// ── Wave Bars ─────────────────────────────────────────────
 function WaveBars({ color, active }) {
   return (
     <div style={{ display:"flex", alignItems:"flex-end", gap:3, height:20, marginTop:5 }}>
@@ -186,7 +175,6 @@ function WaveBars({ color, active }) {
   );
 }
 
-// ── Main Export ───────────────────────────────────────────
 export function PersonaAvatar({ persona, isSpeaking, isActive, size = 110, showName = true }) {
   const W = size, H = size;
 

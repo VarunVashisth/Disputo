@@ -71,7 +71,7 @@ export function useDebate(allPersonas) {
       let entry = null;
 
       if (persona.isHuman) {
-        // ── Human turn ──────────────────────────────────
+ 
         store.setIsLoading(false);
         let humanText = "";
 
@@ -80,7 +80,7 @@ export function useDebate(allPersonas) {
           try {
             humanText = await listenForSpeech();
           } catch {
-            // mic failed — fall through to text input
+
             store.setStreamingText("🎤  Mic unavailable — type your argument below");
             humanText = await store.beginHumanTurn();
           }
@@ -100,7 +100,7 @@ export function useDebate(allPersonas) {
           turn: turn + 1, isHuman: true,
         };
 
-        // Push human text into backend session memory so AI has context
+
         try {
           await fetch(`${API}/inject`, {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -109,7 +109,7 @@ export function useDebate(allPersonas) {
         } catch { /* non-fatal */ }
 
       } else {
-        // ── AI turn ──────────────────────────────────────
+   
         try {
           const res = await fetch(`${API}/turn`, {
             method: "POST", headers: { "Content-Type": "application/json" },

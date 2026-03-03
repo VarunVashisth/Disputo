@@ -1,4 +1,4 @@
-// All prompt engineering in one place.
+
 
 export function buildSystemPrompt(persona) {
   return `You are ${persona.name}, a highly knowledgeable ${persona.ideology} debater.

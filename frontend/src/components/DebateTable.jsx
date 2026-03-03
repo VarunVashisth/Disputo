@@ -1,10 +1,7 @@
-// DebateTable — 2D Cinematic Canvas Arena
-// Local PNG images. Speaking persona animates to centre.
-// Others dim and stay in their seat positions.
+
 
 import React, { useEffect, useRef } from "react";
 
-// ── Load image — local /public paths need no crossOrigin ─
 function loadImage(url) {
   return new Promise((resolve) => {
     if (!url) { resolve(null); return; }
@@ -37,7 +34,6 @@ function createNoiseBuffer(W, H) {
   return off;
 }
 
-// Home seat X ratios — where personas rest when not speaking
 function homeRatios(n) {
   if (n === 1) return [0.50];
   if (n === 2) return [0.22, 0.78];
@@ -45,7 +41,6 @@ function homeRatios(n) {
   return            [0.12, 0.36, 0.64, 0.88];
 }
 
-// ── Draw a persona image (or silhouette fallback) ─────────
 function drawPersonaImage(ctx, img, figX, figY, figW, figH, alpha, dimmed) {
   ctx.save();
   ctx.globalAlpha = alpha;
@@ -99,7 +94,6 @@ function drawPersonaImage(ctx, img, figX, figY, figW, figH, alpha, dimmed) {
   ctx.restore();
 }
 
-// ── Rim lighting + glow for active speaker ────────────────
 function drawGlow(ctx, figX, figY, figW, figH, colorHex, t) {
   const pulse = 0.50 + Math.sin(t * 3.0) * 0.08;
   const [r,g,b] = hexToRgb(colorHex);
@@ -192,9 +186,7 @@ function drawGlitch(ctx, W, H, intensity) {
   }
 }
 
-// ─────────────────────────────────────────────────────────
-// MASTER RENDER
-// ─────────────────────────────────────────────────────────
+
 function render(canvas, s, personas, noise) {
   const ctx = canvas.getContext("2d");
   const W   = canvas.width;
@@ -225,7 +217,6 @@ function render(canvas, s, personas, noise) {
   ctx.fillStyle = floorG;
   ctx.fillRect(0, 0, W, H);
 
-  // ── Per-persona positions ─────────────────────────────
   const n     = personas.length;
   const homes = homeRatios(n);   // resting X ratios
 
@@ -318,9 +309,7 @@ function render(canvas, s, personas, noise) {
   if (s.glitch > 0.015) drawGlitch(ctx, W, H, s.glitch);
 }
 
-// ─────────────────────────────────────────────────────────
-// COMPONENT
-// ─────────────────────────────────────────────────────────
+
 export function DebateTable({ personas, currentSpeaker, isRunning, streamingText }) {
   const canvasRef = useRef(null);
   const noiseRef  = useRef(null);

@@ -1,4 +1,4 @@
-/* DebatePage.module.css */
+
 
 .page {
   height: 100vh;
@@ -8,7 +8,7 @@
   overflow: hidden;
 }
 
-/* ── Top Bar ─────────────────────────────────────────────── */
+
 .topBar {
   display: flex;
   align-items: center;
@@ -108,7 +108,6 @@
 }
 .exportBtn:hover { background: #0a1f16; }
 
-/* ── Progress ────────────────────────────────────────────── */
 .progressTrack {
   height: 2px;
   background: #111;
@@ -121,7 +120,6 @@
   transition: width 0.8s ease;
 }
 
-/* ── Status Strip ────────────────────────────────────────── */
 .statusStrip {
   display: flex;
   align-items: center;
@@ -160,7 +158,6 @@
   letter-spacing: 1px;
 }
 
-/* ── Body ────────────────────────────────────────────────── */
 .body {
   flex: 1;
   display: flex;
@@ -168,7 +165,6 @@
   min-height: 0;
 }
 
-/* ── Left Panel ──────────────────────────────────────────── */
 .leftPanel {
   width: 54%;
   min-width: 300px;
@@ -184,7 +180,6 @@
   background: #050508;
 }
 
-/* Scanline + noise on left panel */
 .leftPanel::before {
   content: "";
   position: absolute;
@@ -212,7 +207,6 @@
   z-index: 0;
 }
 
-/* ── Participants ─────────────────────────────────────────── */
 .participants {
   display: flex;
   gap: 20px;
@@ -240,7 +234,6 @@
   transition: color 0.5s;
 }
 
-/* ── End Panel ───────────────────────────────────────────── */
 .endPanel {
   text-align: center;
   padding: 16px;
@@ -278,7 +271,6 @@
 }
 .endBtn:hover { color: var(--white); border-color: var(--white-dim); }
 
-/* ── Error ───────────────────────────────────────────────── */
 .errorBox {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -291,7 +283,6 @@
   text-align: center;
 }
 
-/* ── Right Panel ─────────────────────────────────────────── */
 .rightPanel {
   flex: 1;
   display: flex;
@@ -324,7 +315,6 @@
   color: #1e1e1e;
 }
 
-/* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 700px) {
   .body { flex-direction: column; }
   .leftPanel {

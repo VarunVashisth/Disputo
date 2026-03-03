@@ -1,10 +1,4 @@
-// ============================================================
-// SESSION STORE
-// In-memory Map for MVP. Replace with Redis for production.
-//
-// To upgrade: npm install ioredis
-// Then replace Map operations with redis.set/get/del
-// ============================================================
+
 
 export const sessionStore = new Map();
 

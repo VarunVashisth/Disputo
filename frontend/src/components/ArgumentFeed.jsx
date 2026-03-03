@@ -1,8 +1,4 @@
-// ============================================================
-// ArgumentFeed — Live debate argument feed
-// Shows all past arguments + the currently streaming one
-// Text streams in word by word via SSE
-// ============================================================
+
 
 import React, { useEffect, useRef } from "react";
 
@@ -55,7 +51,6 @@ function ArgumentCard({ entry, isLatest }) {
   );
 }
 
-// ── Streaming Card (live) ─────────────────────────────────
 function StreamingCard({ persona, text, isLoading }) {
   return (
     <div style={{
@@ -112,7 +107,6 @@ function StreamingCard({ persona, text, isLoading }) {
   );
 }
 
-// ── Main Export ───────────────────────────────────────────
 export function ArgumentFeed({ argumentHistory, currentSpeaker, streamingText, isLoading }) {
   const bottomRef = useRef(null);
 

@@ -31,18 +31,17 @@ export function DebatePage() {
 
   const exportTranscript = () => {
     const lines = [
-      "════════════════════════════════════════════════════════════",
+
       "   DISPUTO — DEBATE TRANSCRIPT",
-      "════════════════════════════════════════════════════════════",
+      
       `   Topic:    ${store.topic}`,
       `   Date:     ${new Date().toLocaleString()}`,
       `   Debaters: ${selectedPersonas.map(p => `${p.name} (${p.ideology})`).join(", ")}`,
-      "════════════════════════════════════════════════════════════",
-      "",
+         ,
       ...store.argumentHistory.map(h =>
         `[Turn ${h.turn}] ${h.personaName}${h.isHuman ? " [HUMAN]" : ""} — ${h.ideology}\n"${h.summary}"\n`
       ),
-      "════════════════════════════════════════════════════════════",
+      ,
     ];
     const blob = new Blob([lines.join("\n")], { type:"text/plain" });
     const a = document.createElement("a");
