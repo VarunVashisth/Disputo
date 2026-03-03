@@ -1,11 +1,11 @@
-# ⚔️ AI Debate Simulator — MVP
+# ⚔️ AI Debate Simulator — Disputo
 
 > Multi-persona intellectual debate engine. Black & white grungy aesthetic.
 > Powered by Groq + Llama 3.3 (free). Zero cost to run.
 
 ---
 
-## 🚀 Quick Start (5 minutes)
+## Installation
 
 ### 1. Get a free Groq API key
 Go to https://console.groq.com → sign up → copy your API key.
