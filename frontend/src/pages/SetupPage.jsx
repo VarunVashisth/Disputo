@@ -292,7 +292,7 @@ export function SetupPage() {
             <div className={styles.settingItem}>
               <div className={styles.settingLabel}>TOTAL TURNS</div>
               <div className={styles.turnButtons}>
-                {[4,6,8,10,12,16].map(n => (
+                {[6,8,10,12,16,20,24,30].map(n => (
                   <button key={n} className={styles.turnBtn}
                     data-active={store.totalTurns===n}
                     style={{
