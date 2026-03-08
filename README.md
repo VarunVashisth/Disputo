@@ -74,7 +74,7 @@ debate-mvp/
 
 ---
 
-## 🏗️ Architecture Guide
+## Architecture Guide
 
 ### How a debate works, end to end
 
