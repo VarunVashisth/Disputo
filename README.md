@@ -9,7 +9,7 @@
 
 ### 1. Get a free Groq API key
 Go to https://console.groq.com → sign up → copy your API key.
-It's completely free. No credit card required.
+It's completely free. 
 
 ### 2. Start the backend
 ```bash
