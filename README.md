@@ -33,7 +33,7 @@ Open http://localhost:5173 — you're live.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 debate-mvp/
