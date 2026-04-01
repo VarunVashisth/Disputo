@@ -1,6 +1,6 @@
 #  AI Debate Simulator — Disputo
 
-> Multi-Persona intellectual debate engine. Black & white grungy aesthetic.
+> Multi-Persona Intellectual Debate Engine. Black & white grungy aesthetic.
 > Powered by Groq + Llama 3.3 (free). 
 
 ---
