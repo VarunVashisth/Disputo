@@ -2,7 +2,6 @@
 
 export const sessionStore = new Map();
 
-// Auto-cleanup sessions older than 2 hours
 setInterval(() => {
   const TWO_HOURS = 2 * 60 * 60 * 1000;
   const now = Date.now();
@@ -12,4 +11,4 @@ setInterval(() => {
       console.log(`[Session] Cleaned up expired session: ${id}`);
     }
   }
-}, 30 * 60 * 1000); // run every 30 min
+}, 30 * 60 * 1000); 

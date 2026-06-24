@@ -6,7 +6,6 @@ function loadImage(url) {
   return new Promise((resolve) => {
     if (!url) { resolve(null); return; }
     const img = new Image();
-    // Only set crossOrigin for external URLs
     if (url.startsWith("http")) img.crossOrigin = "anonymous";
     img.onload  = () => resolve(img);
     img.onerror = () => resolve(null);
@@ -70,7 +69,6 @@ function drawPersonaImage(ctx, img, figX, figY, figW, figH, alpha, dimmed) {
       ctx.globalAlpha = alpha;
     }
 
-    // Cinematic darken gradient — void emergence
     const dk = ctx.createLinearGradient(figX, figY, figX, figY + figH);
     dk.addColorStop(0,    "rgba(5,4,3,0.65)");
     dk.addColorStop(0.20, "rgba(5,4,3,0.06)");
@@ -80,7 +78,6 @@ function drawPersonaImage(ctx, img, figX, figY, figW, figH, alpha, dimmed) {
     ctx.fillRect(figX, figY, figW, figH);
 
   } else {
-    // Silhouette fallback
     ctx.fillStyle = "#0e0c0a";
     ctx.fillRect(figX, figY, figW, figH);
     ctx.beginPath();
@@ -99,19 +96,16 @@ function drawGlow(ctx, figX, figY, figW, figH, colorHex, t) {
   const [r,g,b] = hexToRgb(colorHex);
   const glow = (a) => `rgba(${r},${g},${b},${(a * pulse).toFixed(3)})`;
 
-  // Left rim
   const lg = ctx.createLinearGradient(figX - figW*0.20, 0, figX + figW*0.24, 0);
   lg.addColorStop(0, glow(0.44)); lg.addColorStop(1, glow(0));
   ctx.fillStyle = lg;
   ctx.fillRect(figX - figW*0.20, figY, figW*0.44, figH);
 
-  // Right rim
   const rg = ctx.createLinearGradient(figX + figW*0.76, 0, figX + figW*1.20, 0);
   rg.addColorStop(0, glow(0)); rg.addColorStop(1, glow(0.44));
   ctx.fillStyle = rg;
   ctx.fillRect(figX + figW*0.60, figY, figW*0.60, figH);
 
-  // Top halo above head
   const tg = ctx.createRadialGradient(
     figX + figW*0.5, figY - figH*0.04, 0,
     figX + figW*0.5, figY - figH*0.04, figW*0.68
@@ -120,7 +114,6 @@ function drawGlow(ctx, figX, figY, figW, figH, colorHex, t) {
   ctx.fillStyle = tg;
   ctx.fillRect(figX - figW*0.18, figY - figH*0.10, figW*1.36, figH*0.40);
 
-  // Floor puddle
   const fg = ctx.createRadialGradient(
     figX + figW*0.5, figY + figH, 0,
     figX + figW*0.5, figY + figH, figW*0.75
@@ -195,10 +188,8 @@ function render(canvas, s, personas, noise) {
   s.t += 0.016;
   const t = s.t;
 
-  // Tension
   s.tension += ((s.currentSpeaker ? 1 : 0) - s.tension) * 0.022;
 
-  // Glitch trigger
   s.glitchCD -= 0.016;
   if (s.currentSpeaker && s.glitchCD <= 0 && Math.random() < 0.025) {
     s.glitch   = 0.28 + Math.random() * 0.40;
@@ -206,11 +197,9 @@ function render(canvas, s, personas, noise) {
   }
   s.glitch = (s.glitch || 0) * 0.74;
 
-  // Clear
   ctx.fillStyle = "#050403";
   ctx.fillRect(0, 0, W, H);
 
-  // Floor atmosphere
   const floorG = ctx.createLinearGradient(0, H*0.70, 0, H);
   floorG.addColorStop(0, "rgba(0,0,0,0)");
   floorG.addColorStop(1, "rgba(18,14,10,0.50)");
@@ -218,18 +207,14 @@ function render(canvas, s, personas, noise) {
   ctx.fillRect(0, 0, W, H);
 
   const n     = personas.length;
-  const homes = homeRatios(n);   // resting X ratios
+  const homes = homeRatios(n);  
 
-  // Update animated X for each persona
-  // Speaking persona lerps toward 0.5 (centre)
-  // Others lerp back to their home position
   personas.forEach((persona, i) => {
     const speaking = s.currentSpeaker?.id === persona.id;
     const targetX  = speaking ? 0.50 : homes[i];
     s.personaX[i]  = (s.personaX[i] ?? homes[i]) + (targetX - (s.personaX[i] ?? homes[i])) * 0.055;
   });
 
-  // Draw order: inactive behind, speaker on top
   const order = [...Array(n).keys()].sort((a, b) => {
     const aS = s.currentSpeaker?.id === personas[a].id;
     const bS = s.currentSpeaker?.id === personas[b].id;
@@ -242,37 +227,29 @@ function render(canvas, s, personas, noise) {
     const speaking = s.currentSpeaker?.id === persona.id;
     const dimmed   = s.isRunning && !speaking;
 
-    // ── Height: speaking = 80% canvas, seat = 62%, idle = 68%
     const targetH = speaking
       ? H * 0.80
       : dimmed ? H * 0.58 : H * 0.66;
     s.personaH[i] = (s.personaH[i] ?? H*0.66) + (targetH - (s.personaH[i] ?? H*0.66)) * 0.055;
     const figH = s.personaH[i];
 
-    // Aspect ratio from image, fallback 0.55
     const ar   = img ? (img.naturalWidth / img.naturalHeight) : 0.55;
     const figW = figH * ar;
 
-    // X from animated position (centre of figure)
     const centreX = W * s.personaX[i];
     const figX    = centreX - figW * 0.5;
 
-    // Anchor bottom at 86% H
     const figY = H * 0.86 - figH;
 
-    // Breathing — only when not animating toward centre
     const breathe = Math.sin(t * 0.50 + i * 1.35) * (H * 0.0025);
 
-    // Opacity
     const targetAlpha = speaking ? 1.0 : dimmed ? 0.24 : 0.70;
     s.personaAlpha[i] = (s.personaAlpha[i] ?? 0.70) + (targetAlpha - (s.personaAlpha[i] ?? 0.70)) * 0.050;
 
-    // Micro inward lean for speaker
     ctx.save();
     if (speaking && s.tension > 0.1) {
       const cx = centreX;
       const cy = figY + figH;
-      // Lean direction: left-side personas lean right, right-side lean left
       const leanDir = homes[i] < 0.5 ? 1 : -1;
       ctx.translate(cx, cy);
       ctx.rotate(leanDir * 0.010 * s.tension);
@@ -282,13 +259,11 @@ function render(canvas, s, personas, noise) {
     drawPersonaImage(ctx, img, figX, figY + breathe, figW, figH, s.personaAlpha[i], dimmed);
     ctx.restore();
 
-    // Glow outside of transform
     if (speaking) {
       drawGlow(ctx, figX, figY + breathe, figW, figH, persona.color, t);
     }
   });
 
-  // Table line
   const tableY = H * 0.868;
   const tg = ctx.createLinearGradient(0,0,W,0);
   tg.addColorStop(0,   "rgba(30,24,18,0)");
@@ -302,7 +277,6 @@ function render(canvas, s, personas, noise) {
   ctx.moveTo(W*0.04, tableY); ctx.lineTo(W*0.96, tableY);
   ctx.stroke();
 
-  // Overlays
   drawVignette(ctx, W, H);
   drawGrain(ctx, W, H, noise);
   drawScanlines(ctx, W, H);
@@ -322,8 +296,8 @@ export function DebateTable({ personas, currentSpeaker, isRunning, streamingText
     glitchCD:       0,
     tension:        0,
     images:         [],
-    personaX:       [],   // animated X ratio per persona (0–1)
-    personaH:       [],   // animated height per persona (px)
+    personaX:       [],  
+    personaH:       [],   
     personaAlpha:   [],
   });
 
@@ -337,7 +311,6 @@ export function DebateTable({ personas, currentSpeaker, isRunning, streamingText
 
     const homes = homeRatios(personas.length);
 
-    // Reset animated state
     live.current.personaX     = homes.slice();
     live.current.personaH     = personas.map(() => 0);
     live.current.personaAlpha = personas.map(() => 0.70);
@@ -351,7 +324,6 @@ export function DebateTable({ personas, currentSpeaker, isRunning, streamingText
       canvas.width  = (canvas.offsetWidth  || 700) * dpr;
       canvas.height = (canvas.offsetHeight || 420) * dpr;
       noiseRef.current = createNoiseBuffer(canvas.width, canvas.height);
-      // Re-seed personaH in pixel terms after resize
       live.current.personaH = personas.map(() => canvas.height * 0.66);
     }
     sizeCanvas();

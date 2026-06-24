@@ -1,6 +1,4 @@
-// ============================================================
-// App.jsx — Root component with routing and cursor
-// ============================================================
+
 
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";

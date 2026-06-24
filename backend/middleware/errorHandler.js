@@ -1,7 +1,3 @@
-// ============================================================
-// ERROR HANDLER MIDDLEWARE
-// Catches all unhandled errors and returns consistent JSON
-// ============================================================
 
 export function errorHandler(err, req, res, next) {
   console.error(`[Error] ${req.method} ${req.path}:`, err.message);

@@ -6,7 +6,6 @@ import { sessionStore } from "../services/sessionStore.js";
 
 export const debateRouter = Router();
 
-// POST /api/debate/start
 debateRouter.post("/start", (req, res) => {
   const { topic, personas, totalTurns = 10 } = req.body;
   if (!topic || !personas || personas.length < 1)
@@ -73,14 +72,12 @@ debateRouter.post("/tts", async (req, res) => {
 });
 
 
-// POST /api/debate/turn  — AI speaks
 debateRouter.post("/turn", async (req, res) => {
   const { sessionId } = req.body;
   const session = sessionStore.get(sessionId);
   if (!session) return res.status(404).json({ error: "Session not found" });
   if (session.status === "ended") return res.status(400).json({ error: "Debate ended" });
 
-  // Round-robin over AI personas only
   const personaIndex = session.currentTurn % session.personas.length;
   const persona = session.personas[personaIndex];
   const lastArg = session.argumentHistory.at(-1) || null;
@@ -121,13 +118,11 @@ debateRouter.post("/turn", async (req, res) => {
   }
 });
 
-// POST /api/debate/inject  — Human's turn pushed into session memory
 debateRouter.post("/inject", (req, res) => {
   const { sessionId, entry } = req.body;
   const session = sessionStore.get(sessionId);
   if (!session) return res.status(404).json({ error: "Session not found" });
 
-  // Add to history without advancing the AI turn counter
   session.argumentHistory.push({ ...entry, injected: true });
   sessionStore.set(sessionId, session);
   res.json({ ok: true });
